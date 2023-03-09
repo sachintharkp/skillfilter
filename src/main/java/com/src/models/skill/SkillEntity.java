@@ -1,12 +1,9 @@
 package com.src.models.skill;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.src.models.user.UserEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name="skill_util")
@@ -22,14 +19,9 @@ public class SkillEntity {
     @Column(name = "skill_ldesc")
     private String skillLdesc;
 
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            },
-            mappedBy = "skillEntities")
-    @JsonIgnore
-    private Set<UserEntity> userEntities = new HashSet<>();
+    @OneToMany(mappedBy = "skill")
+    List<UserSkillEntity> skillEntities;
+
 
     public long getSkillId() {
         return skillId;
@@ -51,11 +43,11 @@ public class SkillEntity {
         this.skillLdesc = skillLdesc;
     }
 
-    public Set<UserEntity> getUserEntities() {
-        return userEntities;
+    public List<UserSkillEntity> getSkillEntities() {
+        return skillEntities;
     }
 
-    public void setUserEntities(Set<UserEntity> userEntities) {
-        this.userEntities = userEntities;
+    public void setSkillEntities(List<UserSkillEntity> skillEntities) {
+        this.skillEntities = skillEntities;
     }
 }

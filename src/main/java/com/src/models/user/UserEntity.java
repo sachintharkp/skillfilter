@@ -1,10 +1,9 @@
 package com.src.models.user;
 
-import com.src.models.skill.SkillEntity;
+import com.src.models.skill.UserSkillEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -34,17 +33,8 @@ public class UserEntity {
     @NotNull
     private int years;
 
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            })
-    @JoinTable(name = "user_skill_tab",
-            joinColumns = {@JoinColumn(name = "user_util_userId")},
-            inverseJoinColumns = {@JoinColumn(name = "skill_util_skillId")})
-
-
-    private List<SkillEntity> skillEntities = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    private List<UserSkillEntity> userSkills;
 
     public long getUserId() {
         return userId;
@@ -89,12 +79,12 @@ public class UserEntity {
     public void setYears(int years) {
         this.years = years;
     }
-    public List<SkillEntity> getSkills() {
-        return skillEntities;
+
+    public List<UserSkillEntity> getUserSkills() {
+        return userSkills;
     }
 
-    public void setSkills(List<SkillEntity> skillEntities) {
-        this.skillEntities = skillEntities;
+    public void setUserSkills(List<UserSkillEntity> userSkills) {
+        this.userSkills = userSkills;
     }
-
 }

@@ -1,6 +1,8 @@
 package com.src.controllers.user;
 
 import com.src.exception.skill.SkillNotFoundException;
+import com.src.exception.user.UserNotFoundException;
+import com.src.models.user.UpdateUserSkillRequest;
 import com.src.models.user.UserRequest;
 import com.src.models.user.UserResponse;
 import com.src.service.user.UserService;
@@ -36,6 +38,21 @@ public class UserController {
             LOGGER.log(Level.SEVERE, ex.toString(), ex);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (SkillNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @PostMapping("/addSkill")
+    public  ResponseEntity<UserResponse> addSkillToUser(@Valid @RequestBody UpdateUserSkillRequest userSkillRequest){
+        LOGGER.info("Request received at user resource to create a user");
+        try {
+            return ResponseEntity.ok().body( userService.addSkillsToExitingUser(userSkillRequest));
+        } catch (IllegalArgumentException ex) {
+            LOGGER.log(Level.SEVERE, ex.toString(), ex);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (SkillNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (UserNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
