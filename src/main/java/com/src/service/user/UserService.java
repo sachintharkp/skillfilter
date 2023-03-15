@@ -3,6 +3,7 @@ package com.src.service.user;
 import com.src.exception.skill.SkillNotFoundException;
 import com.src.exception.user.UserNotFoundException;
 import com.src.models.skill.SkillEntity;
+import com.src.models.skill.SkillResponse;
 import com.src.models.skill.UserSkillEntity;
 import com.src.models.user.UpdateUserSkillRequest;
 import com.src.models.user.UserEntity;
@@ -14,6 +15,7 @@ import com.src.repositories.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,10 +42,24 @@ public class UserService {
         userEntity.setLastname(user.getLastName());
         userEntity.setYears(user.getYears());
         UserEntity createdUser = userRepository.save(userEntity);
-        if (user.getSkillList() != null) {
-            addSkillsToUser(createdUser, user.getSkillList());
-        }
+
         UserResponse userResponse = new UserResponse();
+
+        if (user.getSkillList() != null) {
+
+            List<SkillEntity> userSkills = addSkillsToUser(createdUser, user.getSkillList());
+            List<SkillResponse> skiillList = new ArrayList<>();
+
+            userSkills.forEach((skill) -> {
+               SkillResponse skillEach = new SkillResponse();
+                skillEach.setSkillId(skill.getSkillId());
+                skillEach.setSkillSdesc(skill.getSkillSdesc());
+                skillEach.setSkillLdesc(skill.getSkillLdesc());
+                skiillList.add(skillEach);
+            });
+            userResponse.setSkillList(skiillList);
+        }
+
         userResponse.setUserid(userEntity.getUserId());
         userResponse.setUsername(userEntity.getUsername());
         userResponse.setPassword(userEntity.getPassword());
@@ -52,11 +68,12 @@ public class UserService {
         userResponse.setYears(String.valueOf(userEntity.getYears()));
 
 
+
         return userResponse;
 
     }
 
-    public void addSkillsToUser(UserEntity user, List<Long> skills) throws SkillNotFoundException {
+    public List<SkillEntity> addSkillsToUser(UserEntity user, List<Long> skills) throws SkillNotFoundException {
 
         List<Long> uniqueSkills = skills.stream().distinct().collect(Collectors.toList());
         List<SkillEntity> skillList = skillRepository.findBySkillIdIn(uniqueSkills);
@@ -73,6 +90,7 @@ public class UserService {
                 userSkillRepository.save(userSkillEntity);
             }
         });
+        return skillList;
     }
 
     public UserResponse addSkillsToExitingUser(UpdateUserSkillRequest userSkillRequest) throws SkillNotFoundException, UserNotFoundException {
@@ -82,7 +100,7 @@ public class UserService {
         if (userEntity == null) {
             throw new UserNotFoundException("Invalid User");
         } else {
-            addSkillsToUser(userEntity, userSkillRequest.getSkillId());
+            List<SkillEntity> userSkills = addSkillsToUser(userEntity, userSkillRequest.getSkillId());
             UserResponse userResponse = new UserResponse();
             userResponse.setUserid(userEntity.getUserId());
             userResponse.setUsername(userEntity.getUsername());
@@ -90,6 +108,18 @@ public class UserService {
             userResponse.setFirstname(userEntity.getFirstname());
             userResponse.setLastname(userEntity.getLastname());
             userResponse.setYears(String.valueOf(userEntity.getYears()));
+            if (!userSkills.isEmpty()) {
+                List<SkillResponse> skiillList = new ArrayList<>();
+                userSkills.forEach((skill) -> {
+                    SkillResponse skillEach = new SkillResponse();
+                    skillEach.setSkillId(skill.getSkillId());
+                    skillEach.setSkillSdesc(skill.getSkillSdesc());
+                    skillEach.setSkillLdesc(skill.getSkillLdesc());
+                    skiillList.add(skillEach);
+                });
+                userResponse.setSkillList(skiillList);
+            }
+
             return userResponse;
 
         }

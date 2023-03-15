@@ -80,6 +80,19 @@ public class SkillService {
                         skillsUser.setUsername(user.getUsername());
                         skillsUser.setFirstname(user.getFirstname());
                         skillsUser.setLastname(user.getLastname());
+
+                        List<SkillEntity> userSkills = userRepository.FindUserSkills(user.getUserId());
+                        List<SkillResponse> skiillList = new ArrayList<>();
+
+                        userSkills.forEach((skill) -> {
+                            SkillResponse skillEach = new SkillResponse();
+                            skillEach.setSkillId(skill.getSkillId());
+                            skillEach.setSkillSdesc(skill.getSkillSdesc());
+                            skillEach.setSkillLdesc(skill.getSkillLdesc());
+                            skiillList.add(skillEach);
+                        });
+                        skillsUser.setSkillList(skiillList);
+
                         userResponses.add(skillsUser);
                     }
 

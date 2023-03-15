@@ -2,6 +2,9 @@ package com.src.models.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.src.models.skill.SkillResponse;
+
+import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserResponse {
@@ -35,7 +38,10 @@ public class UserResponse {
     @JsonProperty(ATTR_EXPERIENCE)
     public String years;
 
+    @JsonProperty(ATTR_SKILL)
+    public List<SkillResponse> skillList;
 
+    public static final String ATTR_SKILL = "skill";
 
     public void setUserid(long userid) {
         this.userid = userid;
@@ -59,5 +65,9 @@ public class UserResponse {
 
     public void setYears(String years) {
         this.years = years;
+    }
+
+    public void setSkillList(List<SkillResponse> skillList) {
+        this.skillList = skillList;
     }
 }

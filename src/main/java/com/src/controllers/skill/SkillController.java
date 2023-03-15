@@ -28,7 +28,7 @@ public class SkillController {
 
     @PostMapping("/add")
     public ResponseEntity<SkillResponse> addSkill(@Valid @RequestBody SkillRequest skillRequest){
-    LOGGER.info("Request received at user resource to add a skill");
+    LOGGER.info("Request received to add a skill");
         try {
             return ResponseEntity.ok().body( skillService.addSkill(skillRequest));
         } catch (IllegalArgumentException ex) {
