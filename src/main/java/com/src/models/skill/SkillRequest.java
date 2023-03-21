@@ -24,5 +24,11 @@ public class SkillRequest {
         return skillLdesc;
     }
 
+    public void setSkillSdesc(String skillSdesc) {
+        this.skillSdesc = skillSdesc;
+    }
 
+    public void setSkillLdesc(String skillLdesc) {
+        this.skillLdesc = skillLdesc;
+    }
 }

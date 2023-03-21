@@ -28,4 +28,16 @@ public class SkillResponse {
     public void setSkillLdesc(String skillLdesc) {
         this.skillLdesc = skillLdesc;
     }
+
+    public long getSkillId() {
+        return skillId;
+    }
+
+    public String getSkillSdesc() {
+        return skillSdesc;
+    }
+
+    public String getSkillLdesc() {
+        return skillLdesc;
+    }
 }
