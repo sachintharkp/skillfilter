@@ -19,6 +19,7 @@ import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/skill")
+@CrossOrigin
 public class SkillController {
 
     @Autowired
@@ -26,6 +27,17 @@ public class SkillController {
 
     private static final Logger LOGGER = Logger.getLogger(UserController.class.getSimpleName());
 
+   @GetMapping("/getSkills")
+    public ResponseEntity<List<SkillResponse>> getAllSkills(){
+        LOGGER.info("Request received to get all skills");
+        try{
+            return ResponseEntity.ok().body(skillService.getSkills());
+        } catch (IllegalArgumentException ex) {
+            LOGGER.log(Level.SEVERE, ex.toString(), ex);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
     @PostMapping("/add")
     public ResponseEntity<SkillResponse> addSkill(@Valid @RequestBody SkillRequest skillRequest){
     LOGGER.info("Request received to add a skill");

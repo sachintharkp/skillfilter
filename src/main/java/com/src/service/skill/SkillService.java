@@ -42,6 +42,19 @@ public class SkillService {
         return skillResponse;
     }
 
+    public List<SkillResponse> getSkills(){
+        List<SkillResponse> skillResponses = new ArrayList<>();
+        List<SkillEntity> skillEntities  = skillRepository.findAll();
+        skillEntities.forEach(skillEntity -> {
+            SkillResponse skillEach = new SkillResponse();
+            skillEach.setSkillId(skillEntity.getSkillId());
+            skillEach.setSkillSdesc(skillEntity.getSkillSdesc());
+            skillEach.setSkillLdesc(skillEntity.getSkillLdesc());
+            skillResponses.add(skillEach);
+        });
+        return skillResponses;
+    }
+
 
     public List<SkilledUsersResponse> getUsers(SkillSearchRequest skillSearchRequest) throws SkillNotFoundException {
 

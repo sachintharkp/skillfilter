@@ -11,4 +11,6 @@ public interface SkillRepository extends CrudRepository<SkillEntity,Long> {
 
    List<SkillEntity> findBySkillIdIn(List<Long> skillId);
 
+   List<SkillEntity> findAll();
+
 }
