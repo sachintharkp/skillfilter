@@ -25,6 +25,11 @@ public class SkilledUsersResponse {
     public static final String ATTR_LAST_NAME = "lastName";
     @JsonProperty(ATTR_LAST_NAME)
     public String lastname;
+
+    public static final String ATTR_EXPERIENCE = "experience";
+    @JsonProperty(ATTR_EXPERIENCE)
+    public String years;
+
     @JsonProperty(ATTR_SKILL)
     public List<SkillResponse> skillList;
 
@@ -45,6 +50,10 @@ public class SkilledUsersResponse {
 
     public void setLastname(String lastname) {
         this.lastname = lastname;
+    }
+
+    public void setYears(String years) {
+        this.years = years;
     }
 
     public void setSkillList(List<SkillResponse> skillList) {

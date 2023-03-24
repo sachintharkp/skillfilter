@@ -49,7 +49,7 @@ public class SkillController {
         }
     }
 
-    @GetMapping("/search/users")
+    @PostMapping("/search/users")
     public ResponseEntity<List<SkilledUsersResponse>> getAllUsersBySkillId(@Valid @RequestBody SkillSearchRequest skillSearchRequest){
         try {
             return ResponseEntity.ok().body( skillService.getUsers(skillSearchRequest));

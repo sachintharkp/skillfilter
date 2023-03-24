@@ -93,6 +93,7 @@ public class SkillService {
                         skillsUser.setUsername(user.getUsername());
                         skillsUser.setFirstname(user.getFirstname());
                         skillsUser.setLastname(user.getLastname());
+                        skillsUser.setYears(String.valueOf(user.getYears()));
 
                         List<SkillEntity> userSkills = userRepository.FindUserSkills(user.getUserId());
                         List<SkillResponse> skiillList = new ArrayList<>();
