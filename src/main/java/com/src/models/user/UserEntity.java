@@ -9,22 +9,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "user_util")
-
-@SqlResultSetMapping(
-        name="UserAssignmentResult",
-        entities={
-                @EntityResult(
-                        entityClass = com.src.models.assignment.AssignmentEntity.class,
-                        fields={
-                                @FieldResult(name="assignmentId",column="assignments_id"),
-                                @FieldResult(name="companyName", column="company_name"),
-                                @FieldResult(name="position", column="position") })})
-
-@NamedNativeQuery(
-        name="UserEntity.findUserAssignments",
-        query="select assignments_id,company_name,position from assignment_tab where assignments_id IN (Select assignment_id FROM user_assignment_tab users WHERE users.user_id =:userId);",
-        resultSetMapping = "UserAssignmentResult")
-
 @SqlResultSetMapping(
         name="UserSkillResult",
         entities={

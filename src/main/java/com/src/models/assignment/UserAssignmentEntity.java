@@ -39,11 +39,19 @@ public class UserAssignmentEntity {
         this.assignment = assignment;
     }
 
-    public boolean isActive() {
+    public boolean getIsActive() {
         return isActive;
     }
 
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+    public long getUserAssignmentId() {
+        return userAssignmentId;
+    }
+
+    public void setUserAssignmentId(long userAssignmentId) {
+        this.userAssignmentId = userAssignmentId;
     }
 }

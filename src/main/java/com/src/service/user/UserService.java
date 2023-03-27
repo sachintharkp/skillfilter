@@ -5,6 +5,7 @@ import com.src.exception.skill.SkillNotFoundException;
 import com.src.exception.user.UserNotFoundException;
 import com.src.models.assignment.AssignmentEntity;
 import com.src.models.assignment.UserAssignmentEntity;
+import com.src.models.assignment.UserAssignmentResultsDto;
 import com.src.models.skill.SkillEntity;
 import com.src.models.skill.SkillResponse;
 import com.src.models.skill.UserSkillEntity;
@@ -56,7 +57,7 @@ public class UserService {
         Long activeAssignmentId = user.getActiveAssignmentId();
 
         if (activeAssignmentId != 0) {
-            List<AssignmentEntity> userAllAssignments = addActiveAssignment(createdUser, activeAssignmentId);
+            List<UserAssignmentResultsDto> userAllAssignments = addActiveAssignment(createdUser, activeAssignmentId);
             List<UserAssignmentDetailResponse> assignmentDetailResponse = new ArrayList<>();
 
             userAllAssignments.forEach(assignments -> {
@@ -64,7 +65,7 @@ public class UserService {
                 detailResponse.setActiveAssignmentId(assignments.getAssignmentId());
                 detailResponse.setCompanyName(assignments.getCompanyName());
                 detailResponse.setPosition(assignments.getPosition());
-                //detailResponse.setStatus(assignments.isActive());
+                detailResponse.setStatus(assignments.getIsActive());
                 assignmentDetailResponse.add(detailResponse);
             });
 
@@ -151,7 +152,7 @@ public class UserService {
         }
     }
 
-    public List<AssignmentEntity> addActiveAssignment(UserEntity user, Long activeAssignmentId) throws AssignmentNotFoundException {
+    public List<UserAssignmentResultsDto> addActiveAssignment(UserEntity user, Long activeAssignmentId) throws AssignmentNotFoundException {
 
         AssignmentEntity assignment = assignmentRepository.findByAssignmentId(activeAssignmentId);
 
@@ -163,7 +164,7 @@ public class UserService {
             assignmentEntity.setAssignment(assignment);
             assignmentEntity.setActive(true);
             userAssignmentRepository.save(assignmentEntity);
-            return userRepository.findUserAssignments(user.getUserId());
+            return assignmentRepository.getUserAssignmentDetails(user.getUserId());
 
         }
 

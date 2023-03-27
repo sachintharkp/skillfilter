@@ -3,50 +3,34 @@ package com.src.models.assignment;
 
 public class UserAssignmentResultsDto {
 
-    private long id;
+    private long assignmentId;
 
-    private String name;
-
+    private String companyName;
 
     private String position;
 
-    private  int status;
+    private boolean isActive;
 
-    public UserAssignmentResultsDto(long id) {
-        this.id = id;
-        //this.name = name;
-        //this.position = position;
-        //this.status = status;
-    }
-    public long getId() {
-        return id;
+    public UserAssignmentResultsDto(long assignmentId, String companyName, String position, boolean isActive) {
+        this.assignmentId = assignmentId;
+        this.companyName = companyName;
+        this.position = position;
+        this.isActive = isActive;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public long getAssignmentId() {
+        return assignmentId;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public String getCompanyName() {
+        return companyName;
     }
 
     public String getPosition() {
         return position;
     }
 
-    public void setPosition(String position) {
-        this.position = position;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
+    public boolean getIsActive() {
+        return isActive;
     }
 }
