@@ -1,5 +1,6 @@
 package com.src.controllers.user;
 
+import com.src.exception.assignment.AssignmentNotFoundException;
 import com.src.exception.skill.SkillNotFoundException;
 import com.src.exception.user.UserNotFoundException;
 import com.src.models.user.UpdateUserSkillRequest;
@@ -36,6 +37,8 @@ public class UserController {
             LOGGER.log(Level.SEVERE, ex.toString(), ex);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (SkillNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (AssignmentNotFoundException e) {
             throw new RuntimeException(e);
         }
     }

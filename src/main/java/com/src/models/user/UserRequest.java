@@ -41,6 +41,11 @@ public class UserRequest {
     public List<Long> skillList;
     public static final String ATTR_SKILL = "skill";
 
+
+    public static final String ATTR_ASSIGNMENT = "activeAssignment";
+    @JsonProperty(ATTR_ASSIGNMENT)
+    public long activeAssignmentId;
+
     public String getUsername() {
         return username;
     }
@@ -64,5 +69,9 @@ public class UserRequest {
 
     public List<Long> getSkillList() {
         return skillList;
+    }
+
+    public long getActiveAssignmentId() {
+        return activeAssignmentId;
     }
 }

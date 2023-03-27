@@ -1,5 +1,6 @@
 package com.src.exception;
 
+import com.src.exception.assignment.AssignmentNotFoundException;
 import com.src.exception.skill.SkillNotFoundException;
 import com.src.exception.user.UserNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -13,7 +14,7 @@ import java.util.Date;
 @ControllerAdvice
 public class ControllerExceptionHandler {
 
-    @ExceptionHandler(value = {UserNotFoundException.class, SkillNotFoundException.class})
+    @ExceptionHandler(value = {UserNotFoundException.class, SkillNotFoundException.class, AssignmentNotFoundException.class})
     public ResponseEntity<ErrorMessage> resourceNotFoundException(UserNotFoundException ex, WebRequest request) {
 
         ErrorMessage message = new ErrorMessage(

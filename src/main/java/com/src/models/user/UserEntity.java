@@ -1,5 +1,6 @@
 package com.src.models.user;
 
+import com.src.models.assignment.UserAssignmentEntity;
 import com.src.models.skill.UserSkillEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -52,6 +53,9 @@ public class UserEntity {
     @OneToMany(mappedBy = "user")
     private List<UserSkillEntity> userSkills;
 
+    @OneToMany(mappedBy = "user")
+    private List<UserAssignmentEntity> assignmentEntities;
+
     public long getUserId() {
         return userId;
     }
@@ -102,5 +106,13 @@ public class UserEntity {
 
     public void setUserSkills(List<UserSkillEntity> userSkills) {
         this.userSkills = userSkills;
+    }
+
+    public List<UserAssignmentEntity> getAssignmentEntities() {
+        return assignmentEntities;
+    }
+
+    public void setAssignmentEntities(List<UserAssignmentEntity> assignmentEntities) {
+        this.assignmentEntities = assignmentEntities;
     }
 }
