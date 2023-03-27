@@ -9,10 +9,13 @@ import java.util.List;
 public class AssignmentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "assignment_id")
+    @Column(name = "assignments_id")
     private long assignmentId;
     @Column(name = "company_name")
     private String companyName;
+
+    @Column(name = "position")
+    private String position;
 
     @OneToMany(mappedBy = "assignment")
     List<UserAssignmentEntity> assignmentEntities;
@@ -27,6 +30,14 @@ public class AssignmentEntity {
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
     }
 
     public List<UserAssignmentEntity> getAssignmentEntities() {

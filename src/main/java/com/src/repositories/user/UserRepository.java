@@ -1,5 +1,6 @@
 package com.src.repositories.user;
 
+import com.src.models.assignment.AssignmentEntity;
 import com.src.models.skill.SkillEntity;
 import com.src.models.user.UserEntity;
 import org.springframework.data.repository.CrudRepository;
@@ -14,6 +15,8 @@ public interface UserRepository extends CrudRepository<UserEntity, Long> {
     UserEntity findByUserId(Long userId);
 
     List<SkillEntity> FindUserSkills(@Param("userId") Long userId);
+
+    List<AssignmentEntity> findUserAssignments(@Param("userId") Long userId);
 
 
 

@@ -55,12 +55,19 @@ public class UserService {
 
         Long activeAssignmentId = user.getActiveAssignmentId();
 
-        if (activeAssignmentId != null) {
-            AssignmentEntity userAssignment = addActiveAssignment(createdUser, activeAssignmentId);
-            UserAssignmentDetailResponse assignmentDetailResponse = new UserAssignmentDetailResponse();
-            assignmentDetailResponse.setActiveAssignmentId(userAssignment.getAssignmentId());
-            assignmentDetailResponse.setCompanyName(userAssignment.getCompanyName());
-            assignmentDetailResponse.setActive(true);
+        if (activeAssignmentId != 0) {
+            List<AssignmentEntity> userAllAssignments = addActiveAssignment(createdUser, activeAssignmentId);
+            List<UserAssignmentDetailResponse> assignmentDetailResponse = new ArrayList<>();
+
+            userAllAssignments.forEach(assignments -> {
+                UserAssignmentDetailResponse detailResponse = new UserAssignmentDetailResponse();
+                detailResponse.setActiveAssignmentId(assignments.getAssignmentId());
+                detailResponse.setCompanyName(assignments.getCompanyName());
+                detailResponse.setPosition(assignments.getPosition());
+                //detailResponse.setStatus(assignments.isActive());
+                assignmentDetailResponse.add(detailResponse);
+            });
+
             userResponse.setActiveAssignment(assignmentDetailResponse);
         }
 
@@ -144,7 +151,7 @@ public class UserService {
         }
     }
 
-    public AssignmentEntity addActiveAssignment(UserEntity user, Long activeAssignmentId) throws AssignmentNotFoundException {
+    public List<AssignmentEntity> addActiveAssignment(UserEntity user, Long activeAssignmentId) throws AssignmentNotFoundException {
 
         AssignmentEntity assignment = assignmentRepository.findByAssignmentId(activeAssignmentId);
 
@@ -156,7 +163,8 @@ public class UserService {
             assignmentEntity.setAssignment(assignment);
             assignmentEntity.setActive(true);
             userAssignmentRepository.save(assignmentEntity);
-            return assignment;
+            return userRepository.findUserAssignments(user.getUserId());
+
         }
 
     }
