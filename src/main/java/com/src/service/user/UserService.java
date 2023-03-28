@@ -15,6 +15,7 @@ import com.src.repositories.assignment.UserAssignmentRepository;
 import com.src.repositories.skill.SkillRepository;
 import com.src.repositories.skill.UserSkillRepository;
 import com.src.repositories.user.UserRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -159,6 +160,7 @@ public class UserService {
         if (assignment == null) {
             throw new AssignmentNotFoundException("Assignment is not found");
         } else {
+            userAssignmentRepository.deactivateOtherAssignmentOfUser(user.getUserId());
             UserAssignmentEntity assignmentEntity = new UserAssignmentEntity();
             assignmentEntity.setUser(user);
             assignmentEntity.setAssignment(assignment);
@@ -167,6 +169,38 @@ public class UserService {
             return assignmentRepository.getUserAssignmentDetails(user.getUserId());
 
         }
+
+    }
+
+    public  UserResponse updateUsersAssignment(@Valid UpdateUserAssignmentRequest updateUserAssignmentRequest) throws UserNotFoundException, AssignmentNotFoundException {
+
+        UserEntity user = userRepository.findByUserId(updateUserAssignmentRequest.getUserid());
+        if(user == null){
+            throw new UserNotFoundException("Invalid User");
+        }
+        else{
+            List<UserAssignmentResultsDto> usersAllAssignments = addActiveAssignment(user,updateUserAssignmentRequest.getActiveAssignmentId());
+            List<UserAssignmentDetailResponse> assignmentDetailResponse = new ArrayList<>();
+            UserResponse userResponse = new UserResponse();
+            usersAllAssignments.forEach(assignments -> {
+                UserAssignmentDetailResponse detailResponse = new UserAssignmentDetailResponse();
+                detailResponse.setActiveAssignmentId(assignments.getAssignmentId());
+                detailResponse.setCompanyName(assignments.getCompanyName());
+                detailResponse.setPosition(assignments.getPosition());
+                detailResponse.setStatus(assignments.getIsActive());
+                assignmentDetailResponse.add(detailResponse);
+            });
+
+            userResponse.setActiveAssignment(assignmentDetailResponse);
+            userResponse.setUserid(user.getUserId());
+            userResponse.setUsername(user.getUsername());
+            userResponse.setPassword(user.getPassword());
+            userResponse.setFirstname(user.getFirstname());
+            userResponse.setLastname(user.getLastname());
+            userResponse.setYears(String.valueOf(user.getYears()));
+            return userResponse;
+        }
+
 
     }
 

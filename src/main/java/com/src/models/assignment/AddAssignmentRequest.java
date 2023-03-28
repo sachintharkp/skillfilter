@@ -1,8 +1,10 @@
 package com.src.models.assignment;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class AddAssignmentRequest {
     public static final String ATTR_ASSIGNMENT_COMPANY = "companyName";
 

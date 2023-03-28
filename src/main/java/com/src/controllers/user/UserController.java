@@ -3,6 +3,7 @@ package com.src.controllers.user;
 import com.src.exception.assignment.AssignmentNotFoundException;
 import com.src.exception.skill.SkillNotFoundException;
 import com.src.exception.user.UserNotFoundException;
+import com.src.models.user.UpdateUserAssignmentRequest;
 import com.src.models.user.UpdateUserSkillRequest;
 import com.src.models.user.UserRequest;
 import com.src.models.user.UserResponse;
@@ -56,6 +57,22 @@ public class UserController {
         } catch (UserNotFoundException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @PostMapping("/updateAssignment")
+    public ResponseEntity<UserResponse> updateAssignment(@Valid @RequestBody UpdateUserAssignmentRequest assignmentRequest){
+        LOGGER.info("Request received at user resource to create a user");
+        try {
+            return ResponseEntity.ok().body(userService.updateUsersAssignment(assignmentRequest));
+        } catch (IllegalArgumentException ex) {
+            LOGGER.log(Level.SEVERE, ex.toString(), ex);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (UserNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (AssignmentNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
 }

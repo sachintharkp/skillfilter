@@ -1,4 +1,4 @@
-package com.src.models.assignment;
+package com.src.models.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -9,8 +9,8 @@ public class UpdateUserAssignmentRequest {
     @JsonProperty(ATTR_USER_ID)
     public long userid;
 
-    public static final String ATTR_ASSIGNMENT = "activeAssignmentId";
-    @JsonProperty(ATTR_ASSIGNMENT)
+    public static final String ATTR_ASSIGNMENT_ID = "activeAssignmentId";
+    @JsonProperty(ATTR_ASSIGNMENT_ID)
     public long activeAssignmentId;
 
     public long getUserid() {
