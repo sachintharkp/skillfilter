@@ -1,9 +1,12 @@
 package com.src.service.skill;
 
 import com.src.exception.skill.SkillNotFoundException;
+import com.src.models.assignment.UserAssignmentResultsDto;
 import com.src.models.skill.*;
 import com.src.models.user.SkilledUsersResponse;
+import com.src.models.user.UserAssignmentDetailResponse;
 import com.src.models.user.UserEntity;
+import com.src.repositories.assignment.AssignmentRepository;
 import com.src.repositories.skill.SkillRepository;
 import com.src.repositories.skill.UserSkillRepository;
 import com.src.repositories.user.UserRepository;
@@ -25,6 +28,9 @@ public class SkillService {
 
     @Autowired
     private UserSkillRepository userSkillRepository;
+
+    @Autowired
+    private AssignmentRepository assignmentRepository;
 
     public SkillResponse addSkill(SkillRequest skillRequest) {
 
@@ -106,6 +112,19 @@ public class SkillService {
                             skiillList.add(skillEach);
                         });
                         skillsUser.setSkillList(skiillList);
+
+                        List<UserAssignmentResultsDto> usersAllAssignments = assignmentRepository.getUserAssignmentDetails(user.getUserId());
+                        List<UserAssignmentDetailResponse> assignmentDetailResponse = new ArrayList<>();
+                        usersAllAssignments.forEach(assignments -> {
+                            UserAssignmentDetailResponse detailResponse = new UserAssignmentDetailResponse();
+                            detailResponse.setActiveAssignmentId(assignments.getAssignmentId());
+                            detailResponse.setCompanyName(assignments.getCompanyName());
+                            detailResponse.setPosition(assignments.getPosition());
+                            detailResponse.setStatus(assignments.getIsActive());
+                            assignmentDetailResponse.add(detailResponse);
+                        });
+
+                        skillsUser.setActiveAssignment(assignmentDetailResponse);
 
                         userResponses.add(skillsUser);
                     }

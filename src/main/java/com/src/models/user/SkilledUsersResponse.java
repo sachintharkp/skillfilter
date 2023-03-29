@@ -35,6 +35,10 @@ public class SkilledUsersResponse {
 
     public static final String ATTR_SKILL = "skill";
 
+    public static final String ATTR_ASSIGNMENT = "activeAssignment";
+    @JsonProperty(ATTR_ASSIGNMENT)
+    public List<UserAssignmentDetailResponse> activeAssignment;
+
 
     public void setUserid(long userid) {
         this.userid = userid;
@@ -58,5 +62,9 @@ public class SkilledUsersResponse {
 
     public void setSkillList(List<SkillResponse> skillList) {
         this.skillList = skillList;
+    }
+
+    public void setActiveAssignment(List<UserAssignmentDetailResponse> activeAssignment) {
+        this.activeAssignment = activeAssignment;
     }
 }
