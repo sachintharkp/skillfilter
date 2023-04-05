@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,13 +24,24 @@ public class AssignmentController {
     private static final Logger LOGGER = Logger.getLogger(UserController.class.getSimpleName());
 
     @Autowired
-    AssignmentService  AssignmentService ;
+    AssignmentService assignmentService;
 
     @PostMapping("/add")
-    public ResponseEntity<UserAssignmentDetailResponse> addSkill(@Valid @RequestBody AddAssignmentRequest addAssignmentRequest){
+    public ResponseEntity<UserAssignmentDetailResponse> addAssignment(@Valid @RequestBody AddAssignmentRequest addAssignmentRequest){
         LOGGER.info("Request received to add a new assignment organization");
         try {
-            return ResponseEntity.ok().body( AssignmentService.addNewAssignment(addAssignmentRequest));
+            return ResponseEntity.ok().body( assignmentService.addNewAssignment(addAssignmentRequest));
+        } catch (IllegalArgumentException ex) {
+            LOGGER.log(Level.SEVERE, ex.toString(), ex);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/getAssignments")
+    public ResponseEntity<List<UserAssignmentDetailResponse>> getAssignments(){
+        LOGGER.info("Request received to get all skills");
+        try{
+            return ResponseEntity.ok().body(assignmentService.getAllAssignments());
         } catch (IllegalArgumentException ex) {
             LOGGER.log(Level.SEVERE, ex.toString(), ex);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

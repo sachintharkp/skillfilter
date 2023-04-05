@@ -7,6 +7,9 @@ import com.src.repositories.assignment.AssignmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class AssignmentService {
     @Autowired
@@ -26,5 +29,20 @@ public class AssignmentService {
         detailResponse.setPosition(newAssignment.getPosition());
         detailResponse.setSeats(newAssignment.getSeats());
         return  detailResponse;
+    }
+
+    public List<UserAssignmentDetailResponse> getAllAssignments(){
+      List<AssignmentEntity> assignments = assignmentRepository.findAllAssignmentWithSeats();
+      List<UserAssignmentDetailResponse> assignmentListResponse = new ArrayList<>();
+
+      assignments.forEach( assignment -> {
+          UserAssignmentDetailResponse detailResponse = new UserAssignmentDetailResponse();
+          detailResponse.setCompanyName(assignment.getCompanyName());
+          detailResponse.setPosition(assignment.getPosition());
+          detailResponse.setSeats(assignment.getSeats());
+          assignmentListResponse.add(detailResponse);
+      }
+      );
+      return assignmentListResponse;
     }
 }

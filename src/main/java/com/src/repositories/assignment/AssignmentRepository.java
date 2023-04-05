@@ -17,4 +17,7 @@ public interface AssignmentRepository extends CrudRepository<AssignmentEntity,Lo
     @Query(nativeQuery = true)
     List<UserAssignmentResultsDto> getUserAssignmentDetails(@Param("userId") Long userId);
 
+    @Query(value = "Select * from assignment_tab where no_seats > 0",nativeQuery = true)
+    List<AssignmentEntity> findAllAssignmentWithSeats();
+
 }
