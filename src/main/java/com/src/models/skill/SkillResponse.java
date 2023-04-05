@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class SkillResponse {
 
-    public static final String ATTR_SKILL_ID = "skill_id";
+    public static final String ATTR_SKILL_ID = "skillId";
 
     @JsonProperty(ATTR_SKILL_ID)
     public long skillId;
