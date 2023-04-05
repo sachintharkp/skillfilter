@@ -45,6 +45,9 @@ public class AssignmentEntity {
     @Column(name = "position")
     private String position;
 
+    @Column(name = "no_seats")
+    private int seats;
+
     @OneToMany(mappedBy = "assignment")
     List<UserAssignmentEntity> assignmentEntities;
 
@@ -66,6 +69,14 @@ public class AssignmentEntity {
 
     public void setPosition(String position) {
         this.position = position;
+    }
+
+    public int getSeats() {
+        return seats;
+    }
+
+    public void setSeats(int seats) {
+        this.seats = seats;
     }
 
     public List<UserAssignmentEntity> getAssignmentEntities() {

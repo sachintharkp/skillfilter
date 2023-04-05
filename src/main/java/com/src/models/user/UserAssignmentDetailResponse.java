@@ -17,6 +17,11 @@ public class UserAssignmentDetailResponse {
     @JsonProperty(ATTR_ASSIGNMENT_POSITION)
     public String position;
 
+    public static final String ATTR_ASSIGNMENT_SEATS= "noSeats";
+
+    @JsonProperty(ATTR_ASSIGNMENT_SEATS)
+    public int seats;
+
 
     public static final String ATTR_ASSIGNMENT_STATUS = "status";
     @JsonProperty(ATTR_ASSIGNMENT_STATUS)
@@ -33,6 +38,10 @@ public class UserAssignmentDetailResponse {
 
     public void setPosition(String position) {
         this.position = position;
+    }
+
+    public void setSeats(int seats) {
+        this.seats = seats;
     }
 
     public void setStatus(boolean status) {

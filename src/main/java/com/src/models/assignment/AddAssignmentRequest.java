@@ -18,11 +18,20 @@ public class AddAssignmentRequest {
     @NotBlank
     public String position;
 
+    public static final String ATTR_ASSIGNMENT_SEATS= "noSeats";
+
+    @JsonProperty(ATTR_ASSIGNMENT_SEATS)
+    public int seats;
+
+
     public String getCompanyName() {
         return companyName;
     }
 
     public String getPosition() {
         return position;
+    }
+    public int getSeats() {
+        return seats;
     }
 }

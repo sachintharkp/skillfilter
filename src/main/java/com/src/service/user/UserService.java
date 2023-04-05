@@ -1,6 +1,7 @@
 package com.src.service.user;
 
 import com.src.exception.assignment.AssignmentNotFoundException;
+import com.src.exception.assignment.NoSeatsAvailableException;
 import com.src.exception.skill.SkillNotFoundException;
 import com.src.exception.user.UserNotFoundException;
 import com.src.models.assignment.AssignmentEntity;
@@ -42,7 +43,7 @@ public class UserService {
     private UserAssignmentRepository userAssignmentRepository;
 
 
-    public UserResponse createUser(UserRequest user) throws SkillNotFoundException, AssignmentNotFoundException {
+    public UserResponse createUser(UserRequest user) throws SkillNotFoundException, AssignmentNotFoundException, NoSeatsAvailableException {
 
 
         UserEntity userEntity = new UserEntity();
@@ -153,26 +154,35 @@ public class UserService {
         }
     }
 
-    public List<UserAssignmentResultsDto> addActiveAssignment(UserEntity user, Long activeAssignmentId) throws AssignmentNotFoundException {
+    public List<UserAssignmentResultsDto> addActiveAssignment(UserEntity user, Long activeAssignmentId) throws AssignmentNotFoundException, NoSeatsAvailableException {
 
         AssignmentEntity assignment = assignmentRepository.findByAssignmentId(activeAssignmentId);
 
         if (assignment == null) {
             throw new AssignmentNotFoundException("Assignment is not found");
         } else {
-            userAssignmentRepository.deactivateOtherAssignmentOfUser(user.getUserId());
-            UserAssignmentEntity assignmentEntity = new UserAssignmentEntity();
-            assignmentEntity.setUser(user);
-            assignmentEntity.setAssignment(assignment);
-            assignmentEntity.setActive(true);
-            userAssignmentRepository.save(assignmentEntity);
-            return assignmentRepository.getUserAssignmentDetails(user.getUserId());
+            int availableSeats = assignment.getSeats();
+            if(availableSeats > 0 ){
+                userAssignmentRepository.deactivateOtherAssignmentOfUser(user.getUserId());
+                UserAssignmentEntity assignmentEntity = new UserAssignmentEntity();
+                assignmentEntity.setUser(user);
+                assignmentEntity.setAssignment(assignment);
+                assignmentEntity.setActive(true);
+                userAssignmentRepository.save(assignmentEntity);
+                assignment.setSeats(availableSeats-1);
+                assignmentRepository.save(assignment);
+                return assignmentRepository.getUserAssignmentDetails(user.getUserId());
+            }
+            else{
+                throw new NoSeatsAvailableException ("There are no seats available in this assignment for this user.");
+            }
+
 
         }
 
     }
 
-    public  UserResponse updateUsersAssignment(@Valid UpdateUserAssignmentRequest updateUserAssignmentRequest) throws UserNotFoundException, AssignmentNotFoundException {
+    public  UserResponse updateUsersAssignment(@Valid UpdateUserAssignmentRequest updateUserAssignmentRequest) throws UserNotFoundException, AssignmentNotFoundException, NoSeatsAvailableException {
 
         UserEntity user = userRepository.findByUserId(updateUserAssignmentRequest.getUserid());
         if(user == null){

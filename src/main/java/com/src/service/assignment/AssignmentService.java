@@ -17,12 +17,14 @@ public class AssignmentService {
         AssignmentEntity assignmentEntity = new AssignmentEntity();
         assignmentEntity.setCompanyName(assignmentRequest.getCompanyName());
         assignmentEntity.setPosition(assignmentRequest.getPosition());
+        assignmentEntity.setSeats(assignmentRequest.getSeats());
         AssignmentEntity newAssignment = assignmentRepository.save(assignmentEntity);
 
         UserAssignmentDetailResponse detailResponse = new UserAssignmentDetailResponse();
         detailResponse.setActiveAssignmentId(newAssignment.getAssignmentId());
         detailResponse.setCompanyName(newAssignment.getCompanyName());
         detailResponse.setPosition(newAssignment.getPosition());
+        detailResponse.setSeats(newAssignment.getSeats());
         return  detailResponse;
     }
 }

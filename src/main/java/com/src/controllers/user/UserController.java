@@ -1,6 +1,7 @@
 package com.src.controllers.user;
 
 import com.src.exception.assignment.AssignmentNotFoundException;
+import com.src.exception.assignment.NoSeatsAvailableException;
 import com.src.exception.skill.SkillNotFoundException;
 import com.src.exception.user.UserNotFoundException;
 import com.src.models.user.UpdateUserAssignmentRequest;
@@ -41,6 +42,8 @@ public class UserController {
             throw new RuntimeException(e);
         } catch (AssignmentNotFoundException e) {
             throw new RuntimeException(e);
+        } catch (NoSeatsAvailableException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -70,6 +73,8 @@ public class UserController {
         } catch (UserNotFoundException e) {
             throw new RuntimeException(e);
         } catch (AssignmentNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (NoSeatsAvailableException e) {
             throw new RuntimeException(e);
         }
 
