@@ -37,6 +37,7 @@ public class AssignmentService {
 
       assignments.forEach( assignment -> {
           UserAssignmentDetailResponse detailResponse = new UserAssignmentDetailResponse();
+          detailResponse.setActiveAssignmentId(assignment.getAssignmentId());
           detailResponse.setCompanyName(assignment.getCompanyName());
           detailResponse.setPosition(assignment.getPosition());
           detailResponse.setSeats(assignment.getSeats());
