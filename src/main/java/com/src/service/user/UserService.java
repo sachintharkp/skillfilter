@@ -89,7 +89,6 @@ public class UserService {
             userResponse.setSkillList(skiillList);
         }
 
-
         userResponse.setUserid(userEntity.getUserId());
         userResponse.setUsername(userEntity.getUsername());
         userResponse.setPassword(userEntity.getPassword());
@@ -97,10 +96,43 @@ public class UserService {
         userResponse.setLastname(userEntity.getLastname());
         userResponse.setYears(String.valueOf(userEntity.getYears()));
 
-
         return userResponse;
 
     }
+
+    public UserResponse updateUser(UpdateUserProfileRequest userProfileRequest) throws UserNotFoundException, SkillNotFoundException, AssignmentNotFoundException, NoSeatsAvailableException {
+
+        List<UserAssignmentDetailResponse> assignmentDetailResponse = new ArrayList<>();
+        List<SkillResponse> skiillList = new ArrayList<>();
+
+        UserResponse userResponse = new UserResponse();
+
+        UserEntity userEntity = userRepository.findByUserId(userProfileRequest.getUserid());
+
+        if (userEntity == null) {
+            throw new UserNotFoundException("Invalid User");
+        } else {
+
+            userEntity.setUsername(userProfileRequest.getUsername());
+            userEntity.setFirstname(userProfileRequest.getFirstName());
+            userEntity.setLastname(userProfileRequest.getLastName());
+            userEntity.setYears(userProfileRequest.getYears());
+            userRepository.save(userEntity);
+            skiillList =addSkillsToExitingUser(userProfileRequest);
+            assignmentDetailResponse = updateUsersAssignment(userProfileRequest);
+
+            userResponse.setUserid(userEntity.getUserId());
+            userResponse.setUsername(userEntity.getUsername());
+            userResponse.setPassword(userEntity.getPassword());
+            userResponse.setFirstname(userEntity.getFirstname());
+            userResponse.setLastname(userEntity.getLastname());
+            userResponse.setYears(String.valueOf(userEntity.getYears()));
+            userResponse.setActiveAssignment(assignmentDetailResponse);
+            userResponse.setSkillList(skiillList);
+        }
+        return userResponse;
+    }
+
 
     public List<SkillEntity> addSkillsToUser(UserEntity user, List<Long> skills) throws SkillNotFoundException {
 
@@ -122,34 +154,25 @@ public class UserService {
         return skillList;
     }
 
-    public UserResponse addSkillsToExitingUser(UpdateUserSkillRequest userSkillRequest) throws SkillNotFoundException, UserNotFoundException {
+    public  List<SkillResponse> addSkillsToExitingUser(UpdateUserProfileRequest userSkillRequest) throws SkillNotFoundException, UserNotFoundException {
 
         UserEntity userEntity = userRepository.findByUserId(userSkillRequest.getUserid());
-
+        List<SkillResponse> skiillList = new ArrayList<>();
         if (userEntity == null) {
             throw new UserNotFoundException("Invalid User");
         } else {
             List<SkillEntity> userSkills = addSkillsToUser(userEntity, userSkillRequest.getSkillId());
-            UserResponse userResponse = new UserResponse();
-            userResponse.setUserid(userEntity.getUserId());
-            userResponse.setUsername(userEntity.getUsername());
-            userResponse.setPassword(userEntity.getPassword());
-            userResponse.setFirstname(userEntity.getFirstname());
-            userResponse.setLastname(userEntity.getLastname());
-            userResponse.setYears(String.valueOf(userEntity.getYears()));
-            if (!userSkills.isEmpty()) {
-                List<SkillResponse> skiillList = new ArrayList<>();
-                userSkills.forEach((skill) -> {
+                if (!userSkills.isEmpty()) {
+                    userSkills.forEach((skill) -> {
                     SkillResponse skillEach = new SkillResponse();
                     skillEach.setSkillId(skill.getSkillId());
                     skillEach.setSkillSdesc(skill.getSkillSdesc());
                     skillEach.setSkillLdesc(skill.getSkillLdesc());
                     skiillList.add(skillEach);
                 });
-                userResponse.setSkillList(skiillList);
             }
 
-            return userResponse;
+            return skiillList;
 
         }
     }
@@ -176,13 +199,10 @@ public class UserService {
             else{
                 throw new NoSeatsAvailableException ("There are no seats available in this assignment for this user.");
             }
-
-
         }
-
     }
 
-    public  UserResponse updateUsersAssignment(@Valid UpdateUserAssignmentRequest updateUserAssignmentRequest) throws UserNotFoundException, AssignmentNotFoundException, NoSeatsAvailableException {
+    public  List<UserAssignmentDetailResponse> updateUsersAssignment(@Valid UpdateUserProfileRequest updateUserAssignmentRequest) throws UserNotFoundException, AssignmentNotFoundException, NoSeatsAvailableException {
 
         UserEntity user = userRepository.findByUserId(updateUserAssignmentRequest.getUserid());
         if(user == null){
@@ -208,7 +228,7 @@ public class UserService {
             userResponse.setFirstname(user.getFirstname());
             userResponse.setLastname(user.getLastname());
             userResponse.setYears(String.valueOf(user.getYears()));
-            return userResponse;
+            return assignmentDetailResponse;
         }
 
 
