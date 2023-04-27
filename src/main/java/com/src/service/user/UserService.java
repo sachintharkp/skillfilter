@@ -171,7 +171,6 @@ public class UserService {
                     skiillList.add(skillEach);
                 });
             }
-
             return skiillList;
 
         }
@@ -211,7 +210,6 @@ public class UserService {
         else{
             List<UserAssignmentResultsDto> usersAllAssignments = addActiveAssignment(user,updateUserAssignmentRequest.getActiveAssignmentId());
             List<UserAssignmentDetailResponse> assignmentDetailResponse = new ArrayList<>();
-            UserResponse userResponse = new UserResponse();
             usersAllAssignments.forEach(assignments -> {
                 UserAssignmentDetailResponse detailResponse = new UserAssignmentDetailResponse();
                 detailResponse.setActiveAssignmentId(assignments.getAssignmentId());
@@ -220,15 +218,7 @@ public class UserService {
                 detailResponse.setStatus(assignments.getIsActive());
                 assignmentDetailResponse.add(detailResponse);
             });
-
-            userResponse.setActiveAssignment(assignmentDetailResponse);
-            userResponse.setUserid(user.getUserId());
-            userResponse.setUsername(user.getUsername());
-            userResponse.setPassword(user.getPassword());
-            userResponse.setFirstname(user.getFirstname());
-            userResponse.setLastname(user.getLastname());
-            userResponse.setYears(String.valueOf(user.getYears()));
-            return assignmentDetailResponse;
+           return assignmentDetailResponse;
         }
 
 
