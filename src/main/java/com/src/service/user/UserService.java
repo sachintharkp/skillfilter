@@ -16,7 +16,6 @@ import com.src.repositories.assignment.UserAssignmentRepository;
 import com.src.repositories.skill.SkillRepository;
 import com.src.repositories.skill.UserSkillRepository;
 import com.src.repositories.user.UserRepository;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -201,7 +200,7 @@ public class UserService {
         }
     }
 
-    public  List<UserAssignmentDetailResponse> updateUsersAssignment(@Valid UpdateUserProfileRequest updateUserAssignmentRequest) throws UserNotFoundException, AssignmentNotFoundException, NoSeatsAvailableException {
+    public  List<UserAssignmentDetailResponse> updateUsersAssignment(UpdateUserProfileRequest updateUserAssignmentRequest) throws UserNotFoundException, AssignmentNotFoundException, NoSeatsAvailableException {
 
         UserEntity user = userRepository.findByUserId(updateUserAssignmentRequest.getUserid());
         if(user == null){
@@ -224,5 +223,65 @@ public class UserService {
 
     }
 
+    /*
+    * This service only provide users initial details except skills and Assignments for the search user.
+    * */
+    public List<UserResponse> getAllUsers(){
+
+        List<UserResponse> allUsers = new ArrayList<>();
+
+        List<UserEntity> users = userRepository.findAll();
+
+        users.forEach(user -> {
+           UserResponse userResponse = new UserResponse();
+           userResponse.setUserid(user.getUserId());
+           userResponse.setFirstname(user.getFirstname());
+           userResponse.setLastname(user.getLastname());
+           userResponse.setUsername(user.getUsername());
+           userResponse.setYears(String.valueOf(user.getYears()));
+           allUsers.add(userResponse);
+        });
+        return  allUsers;
+    }
+
+    public UserResponse getUser(Long userId){
+
+        UserEntity user = userRepository.findByUserId(userId);
+
+        List<SkillEntity> userSkills = userRepository.FindUserSkills(user.getUserId());
+        List<SkillResponse> skiillList = new ArrayList<>();
+        if (!userSkills.isEmpty())
+        userSkills.forEach((skill) -> {
+            SkillResponse skillEach = new SkillResponse();
+            skillEach.setSkillId(skill.getSkillId());
+            skillEach.setSkillSdesc(skill.getSkillSdesc());
+            skillEach.setSkillLdesc(skill.getSkillLdesc());
+            skiillList.add(skillEach);
+        });
+
+        List<UserAssignmentResultsDto> usersAllAssignments = assignmentRepository.getUserAssignmentDetails(user.getUserId());
+        List<UserAssignmentDetailResponse> assignmentDetailResponse = new ArrayList<>();
+        if(!usersAllAssignments.isEmpty())
+        usersAllAssignments.forEach(assignments -> {
+            UserAssignmentDetailResponse detailResponse = new UserAssignmentDetailResponse();
+            detailResponse.setActiveAssignmentId(assignments.getAssignmentId());
+            detailResponse.setCompanyName(assignments.getCompanyName());
+            detailResponse.setPosition(assignments.getPosition());
+            detailResponse.setStatus(assignments.getIsActive());
+            assignmentDetailResponse.add(detailResponse);
+        });
+
+        UserResponse response = new UserResponse();
+        response.setUserid(user.getUserId());
+        response.setFirstname(user.getFirstname());
+        response.setLastname(user.getLastname());
+        response.setUsername(user.getUsername());
+        response.setYears(String.valueOf(user.getYears()));
+        response.setActiveAssignment(assignmentDetailResponse);
+        response.setSkillList(skiillList);
+
+
+        return response;
+    }
 
 }

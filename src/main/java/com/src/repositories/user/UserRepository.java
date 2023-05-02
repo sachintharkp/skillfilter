@@ -15,4 +15,6 @@ public interface UserRepository extends CrudRepository<UserEntity, Long> {
 
     List<SkillEntity> FindUserSkills(@Param("userId") Long userId);
 
+    List<UserEntity> findAll();
+
 }

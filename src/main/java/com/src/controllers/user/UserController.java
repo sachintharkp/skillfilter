@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -55,6 +56,28 @@ public class UserController {
         } catch (UserNotFoundException | SkillNotFoundException | AssignmentNotFoundException |
                  NoSeatsAvailableException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @GetMapping("/getUsers")
+    public  ResponseEntity<List<UserResponse>> getAllUsers(){
+        LOGGER.info("Request received at user resource to update a user");
+        try {
+            return ResponseEntity.ok().body( userService.getAllUsers());
+        } catch (IllegalArgumentException ex) {
+            LOGGER.log(Level.SEVERE, ex.toString(), ex);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/getUser")
+    public ResponseEntity<UserResponse> getUser(@Valid @RequestParam("userid")  Long userId){
+        LOGGER.info("Request received at user resource to get a user ");
+        try {
+            return ResponseEntity.ok().body( userService.getUser(userId));
+        } catch (IllegalArgumentException ex) {
+            LOGGER.log(Level.SEVERE, ex.toString(), ex);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
