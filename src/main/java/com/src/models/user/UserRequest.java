@@ -16,18 +16,23 @@ public class UserRequest {
     public static final String ATTR_USER_NAME = "username";
 
     @JsonProperty(ATTR_PASSWORD)
+    @NotBlank
     public String password;
 
     public static final String ATTR_PASSWORD = "password";
 
-    @JsonProperty(ATTR_FIRST_NAME)
+    @JsonProperty(ATTR_ROLE)
     @NotBlank
+    public String role;
+
+    public static final String ATTR_ROLE = "role";
+
+    @JsonProperty(ATTR_FIRST_NAME)
     public String firstName;
 
     public static final String ATTR_FIRST_NAME = "firstName";
 
     @JsonProperty(ATTR_LAST_NAME)
-    @NotBlank
     public String lastName;
 
     public static final String ATTR_LAST_NAME = "lastName";
@@ -73,5 +78,9 @@ public class UserRequest {
 
     public long getActiveAssignmentId() {
         return activeAssignmentId;
+    }
+
+    public String getRole() {
+        return role;
     }
 }

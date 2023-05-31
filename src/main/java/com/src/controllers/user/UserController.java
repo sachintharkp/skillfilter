@@ -4,6 +4,7 @@ import com.src.exception.assignment.AssignmentNotFoundException;
 import com.src.exception.assignment.NoSeatsAvailableException;
 import com.src.exception.skill.SkillNotFoundException;
 import com.src.exception.user.UserNotFoundException;
+import com.src.exception.user.UsernameAlreadyExistException;
 import com.src.models.user.*;
 import com.src.service.user.UserService;
 import jakarta.validation.Valid;
@@ -28,19 +29,15 @@ public class UserController {
 
     private static final Logger LOGGER = Logger.getLogger(UserController.class.getSimpleName());
 
-    @PostMapping("/create")
-    public ResponseEntity<UserResponse> createUser(@Valid @RequestBody UserRequest userRequest){
-        LOGGER.info("Request received at user resource to create a user");
+    @PostMapping("/register")
+    public ResponseEntity<UserResponse> registerUser(@Valid @RequestBody UserRequest userRequest){
+        LOGGER.info("Request received at user resource to register a user");
         try {
-            return ResponseEntity.ok().body( userService.createUser(userRequest));
+            return ResponseEntity.ok().body( userService.register(userRequest));
         } catch (IllegalArgumentException ex) {
             LOGGER.log(Level.SEVERE, ex.toString(), ex);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        } catch (SkillNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (AssignmentNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (NoSeatsAvailableException e) {
+        } catch (UsernameAlreadyExistException e) {
             throw new RuntimeException(e);
         }
     }

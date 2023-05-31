@@ -31,11 +31,12 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "user_id")
     private long userId;
-    @Column(name = "user_name")
+    @Column(name = "user_name",unique=true)
     @NotNull
     private String username;
 
     @Column(name = "password")
+    @NotNull
     private String password;
 
     @Column(name = "first_name")
@@ -49,6 +50,10 @@ public class UserEntity {
     @Column(name = "experience")
     @NotNull
     private int years;
+
+    @Column(name = "role")
+    @NotNull
+    private String role;
 
     @OneToMany(mappedBy = "user")
     private List<UserSkillEntity> userSkills;
@@ -114,5 +119,13 @@ public class UserEntity {
 
     public void setAssignmentEntities(List<UserAssignmentEntity> assignmentEntities) {
         this.assignmentEntities = assignmentEntities;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

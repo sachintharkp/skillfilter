@@ -3,6 +3,7 @@ package com.src.models.user;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.src.models.skill.SkillResponse;
+import jakarta.validation.constraints.NotBlank;
 
 import java.util.List;
 
@@ -22,6 +23,12 @@ public class UserResponse {
 
     @JsonProperty(ATTR_PASSWORD)
     public String password;
+
+    @JsonProperty(ATTR_ROLE)
+    @NotBlank
+    public String role;
+
+    public static final String ATTR_ROLE = "role";
 
 
     public static final String ATTR_FIRST_NAME = "firstName";
@@ -80,5 +87,9 @@ public class UserResponse {
 
     public void setActiveAssignment(List<UserAssignmentDetailResponse> activeAssignment) {
         this.activeAssignment = activeAssignment;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }
