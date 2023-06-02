@@ -22,15 +22,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class UserService {
-
-//    @Autowired
-//    PasswordEncoder passwordEncoder;
-
-
     @Autowired
     private UserRepository userRepository;
 
@@ -49,13 +45,13 @@ public class UserService {
     public UserResponse register(UserRequest user) throws UsernameAlreadyExistException {
 
         UserEntity userEntity = new UserEntity();
+
         if(validUsername(user.getUsername())){
             userEntity.setUsername(user.getUsername());
         }
         else {
             throw new UsernameAlreadyExistException("Email provided already exist.");
         }
-       //userEntity.setPassword(passwordEncoder.encode(user.getPassword()));
         userEntity.setPassword(user.getPassword());
         userEntity.setRole(user.getRole());
         userEntity.setFirstname(user.getFirstName());
@@ -273,12 +269,12 @@ public class UserService {
     }
 
     public boolean validUsername(String username) {
-        UserEntity user = userRepository.findByUsername(username);
-        if(user == null){
-            return true;
+        Optional<UserEntity> user = userRepository.findByUsername(username);
+        if(user.isPresent()){
+            return false;
         }
         else {
-            return false;
+            return true;
         }
     }
 

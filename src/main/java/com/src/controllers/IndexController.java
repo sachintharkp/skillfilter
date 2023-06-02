@@ -13,6 +13,6 @@ public class IndexController {
     @RequestMapping("/index")
     public String index() {
         Log.info("Request received at index resource");
-        return "Welcome! this is the sample micro service with database connection";
+        return "Login again session invalid.";
     }
 }
