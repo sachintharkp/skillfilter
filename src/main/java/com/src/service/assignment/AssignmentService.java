@@ -31,7 +31,7 @@ public class AssignmentService {
         return  detailResponse;
     }
 
-    public List<UserAssignmentDetailResponse> getAllAssignments(){
+    public List<UserAssignmentDetailResponse> getAllAssignmentsWithSeats(){
       List<AssignmentEntity> assignments = assignmentRepository.findAllAssignmentWithSeats();
       List<UserAssignmentDetailResponse> assignmentListResponse = new ArrayList<>();
 
@@ -46,4 +46,5 @@ public class AssignmentService {
       );
       return assignmentListResponse;
     }
+
 }

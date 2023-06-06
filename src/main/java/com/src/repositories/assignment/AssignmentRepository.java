@@ -8,11 +8,12 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface AssignmentRepository extends CrudRepository<AssignmentEntity,Long> {
 
-    AssignmentEntity findByAssignmentId(Long assignmentId);
+    Optional<AssignmentEntity> findByAssignmentId(Long assignmentId);
 
     @Query(nativeQuery = true)
     List<UserAssignmentResultsDto> getUserAssignmentDetails(@Param("userId") Long userId);

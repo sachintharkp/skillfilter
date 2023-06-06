@@ -3,6 +3,8 @@ package com.src.models.assignment;
 
 public class UserAssignmentResultsDto {
 
+    private long uniqueId;
+
     private long assignmentId;
 
     private String companyName;
@@ -11,11 +13,16 @@ public class UserAssignmentResultsDto {
 
     private boolean isActive;
 
-    public UserAssignmentResultsDto(long assignmentId, String companyName, String position, boolean isActive) {
+    public UserAssignmentResultsDto(long uniqueId, long assignmentId, String companyName, String position, boolean isActive) {
+        this.uniqueId = uniqueId;
         this.assignmentId = assignmentId;
         this.companyName = companyName;
         this.position = position;
         this.isActive = isActive;
+    }
+
+    public long getUniqueId() {
+        return uniqueId;
     }
 
     public long getAssignmentId() {

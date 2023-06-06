@@ -1,6 +1,5 @@
 package com.src.repositories.skill;
 
-import com.src.models.skill.SkillEntity;
 import com.src.models.skill.UserSkillEntity;
 import com.src.models.user.UserEntity;
 import org.springframework.data.jpa.repository.Query;
@@ -14,7 +13,7 @@ import java.util.List;
 @Repository
 public interface UserSkillRepository extends CrudRepository<UserSkillEntity,Long> {
 
-    List<UserSkillEntity> findByUserAndSkill(UserEntity user, SkillEntity skill);
+    List<UserSkillEntity> findByUser(UserEntity user);
 
     @Query(value = "SELECT * FROM user_skill_tab users WHERE users.skill_id IN :skills" ,nativeQuery = true)
     List<UserSkillEntity> findUsersBySkillList(@Param("skills") Collection<Long> skills);

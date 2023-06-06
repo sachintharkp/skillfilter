@@ -12,6 +12,7 @@ import java.util.List;
                 @ConstructorResult(
                         targetClass=UserAssignmentResultsDto.class,
                         columns={
+                                @ColumnResult(name="uniqueId"),
                                 @ColumnResult(name="assignmentId"),
                                 @ColumnResult(name="companyName"),
                                 @ColumnResult(name="position"),
@@ -24,6 +25,7 @@ import java.util.List;
 @NamedNativeQuery(
         name="AssignmentEntity.getUserAssignmentDetails",
         query=("SELECT\n" +
+                "        u.user_assignment_id AS uniqueId," +
                 "        a.assignments_id AS 'assignmentId', \n" +
                 "        a.company_name AS 'companyName', \n" +
                 "        a.position AS 'position', \n" +

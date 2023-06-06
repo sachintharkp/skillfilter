@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class UserAssignmentDetailResponse {
 
+    public static final String ATTR_ASSIGNMENT_UNIQUE = "uniqueAssignmentId";
+    @JsonProperty(ATTR_ASSIGNMENT_UNIQUE)
+    public long uniqueAssignmentId;
 
     public static final String ATTR_ASSIGNMENT = "activeAssignmentId";
     @JsonProperty(ATTR_ASSIGNMENT)
@@ -46,5 +49,9 @@ public class UserAssignmentDetailResponse {
 
     public void setStatus(boolean status) {
         this.status = status;
+    }
+
+    public void setUniqueAssignmentId(long uniqueAssignmentId) {
+        this.uniqueAssignmentId = uniqueAssignmentId;
     }
 }

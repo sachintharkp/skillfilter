@@ -3,8 +3,6 @@ package com.src.models.auth;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.UUID;
-
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class LoginResponse {
 
@@ -12,11 +10,6 @@ public class LoginResponse {
 
     @JsonProperty(ATTR_USER_ID)
     public long userid;
-
-    public static final String ATTR_AUTHENTICATED = "authtoken";
-
-    @JsonProperty(ATTR_AUTHENTICATED)
-    public UUID authToken;
 
     public static final String ATTR_STATUS = "status";
     @JsonProperty(ATTR_STATUS)
@@ -31,10 +24,6 @@ public class LoginResponse {
 
     public void setUserid(long userid) {
         this.userid = userid;
-    }
-
-    public void setAuthToken(UUID authToken) {
-        this.authToken = authToken;
     }
 
     public void setStatus(String status) {

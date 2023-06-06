@@ -37,13 +37,11 @@ public class AuthService {
 
                 LoginHistory loginHistory = new LoginHistory();
                 loginHistory.setUserId(user.get().getUserId());
-                loginHistory.setToken(randomToken.toString());
                 loginHistory.setActive(true);
                 loginHistory.setLastLogged(new Date());
                 loginHistRepository.save(loginHistory);
 
                 loginResponse.setUserid(user.get().getUserId());
-                loginResponse.setAuthToken(randomToken);
                 loginResponse.setStatus(SUCCESS);
                 loginResponse.setRole(user.get().getRole());
             }

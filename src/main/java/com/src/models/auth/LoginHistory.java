@@ -12,13 +12,8 @@ public class LoginHistory {
     @Column(name = "hist_id")
     private long histId;
 
-
     @Column(name = "user_id")
     private long userId;
-
-    @Column(name = "token")
-    private String token;
-
 
     @Column(name = "LastLogged")
     @Temporal(TemporalType.TIMESTAMP)
@@ -33,14 +28,6 @@ public class LoginHistory {
 
     public void setUserId(long userId) {
         this.userId = userId;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
     }
 
     public Date getLastLogged() {

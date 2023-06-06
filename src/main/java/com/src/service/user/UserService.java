@@ -83,8 +83,6 @@ public class UserService {
         if (userEntity == null) {
             throw new UserNotFoundException("Invalid User");
         } else {
-            userEntity.setFirstname(userProfileRequest.getFirstName());
-            userEntity.setLastname(userProfileRequest.getLastName());
             userEntity.setYears(userProfileRequest.getYears());
             userRepository.save(userEntity);
             skiillList =addSkillsToExitingUser(userProfileRequest);
@@ -112,18 +110,23 @@ public class UserService {
             if (skillList.size() != uniqueSkills.size()) {
                 throw new SkillNotFoundException("Skill/s you provided not Exist");
             }
-
-            skillList.forEach((skill) -> {
-                List<UserSkillEntity> skillEntityList = userSkillRepository.findByUserAndSkill(user, skill);
-                if (skillEntityList != null) {
+            else {
+                List<UserSkillEntity> skillEntityList = userSkillRepository.findByUser(user);
+                if (skillEntityList.size() > 0) {
+                    skillEntityList.forEach(ex_skills -> {
+                        userSkillRepository.delete(ex_skills);
+                    });
+                }
+                skillList.forEach((skill) -> {
                     UserSkillEntity userSkillEntity = new UserSkillEntity();
                     userSkillEntity.setUser(user);
                     userSkillEntity.setSkill(skill);
                     userSkillRepository.save(userSkillEntity);
-                }
-            });
-            return skillList;
-        }else {
+                });
+                return skillList;
+            }
+        }
+        else {
             return skillList;
         }
     }
@@ -150,31 +153,35 @@ public class UserService {
         }
     }
 
-    public List<UserAssignmentResultsDto> addActiveAssignment(UserEntity user, Long activeAssignmentId) throws AssignmentNotFoundException, NoSeatsAvailableException {
+    public List<UserAssignmentResultsDto> addActiveAssignment(UserEntity user, Long activeAssignmentId,String status) throws AssignmentNotFoundException, NoSeatsAvailableException {
 
-        if (activeAssignmentId != 0) {
-            AssignmentEntity assignment = assignmentRepository.findByAssignmentId(activeAssignmentId);
-
-            if (assignment == null) {
-                throw new AssignmentNotFoundException("Assignment is not found");
-            } else {
-                int availableSeats = assignment.getSeats();
-                if (availableSeats > 0) {
-                    userAssignmentRepository.deactivateOtherAssignmentOfUser(user.getUserId());
-                    UserAssignmentEntity assignmentEntity = new UserAssignmentEntity();
-                    assignmentEntity.setUser(user);
-                    assignmentEntity.setAssignment(assignment);
-                    assignmentEntity.setActive(true);
-                    userAssignmentRepository.save(assignmentEntity);
-                    assignment.setSeats(availableSeats - 1);
-                    assignmentRepository.save(assignment);
-                    return assignmentRepository.getUserAssignmentDetails(user.getUserId());
-                } else {
-                    throw new NoSeatsAvailableException("There are no seats available in this assignment for this user.");
+            if(status.equals("No")) {
+                userAssignmentRepository.deactivateOtherAssignmentOfUser(user.getUserId());
+                return assignmentRepository.getUserAssignmentDetails(user.getUserId());
+            } else if (status.equals("New") && activeAssignmentId > 0) {
+                userAssignmentRepository.deactivateOtherAssignmentOfUser(user.getUserId());
+                Optional<AssignmentEntity> assignment = assignmentRepository.findByAssignmentId(activeAssignmentId);
+                if (!assignment.isPresent()) {
+                    throw new AssignmentNotFoundException("Assignment is not found");
                 }
+                else {
+                    int availableSeats = assignment.get().getSeats();
+                    if (availableSeats > 0) {
+                        UserAssignmentEntity assignmentEntity = new UserAssignmentEntity();
+                        assignmentEntity.setUser(user);
+                        assignmentEntity.setAssignment(assignment.get());
+                        assignmentEntity.setActive(true);
+                        userAssignmentRepository.save(assignmentEntity);
+                        assignment.get().setSeats(availableSeats - 1);
+                        assignmentRepository.save(assignment.get());
+                    } else {
+                        throw new NoSeatsAvailableException("There are no seats available in this assignment for this user.");
+                    }
+                }
+                return assignmentRepository.getUserAssignmentDetails(user.getUserId());
+            }else {
+                return assignmentRepository.getUserAssignmentDetails(user.getUserId());
             }
-        }
-        return  null;
 
     }
 
@@ -185,7 +192,7 @@ public class UserService {
             throw new UserNotFoundException("Invalid User");
         }
         else{
-            List<UserAssignmentResultsDto> usersAllAssignments = addActiveAssignment(user,updateUserAssignmentRequest.getActiveAssignmentId());
+            List<UserAssignmentResultsDto> usersAllAssignments = addActiveAssignment(user,updateUserAssignmentRequest.getActiveAssignmentId(), updateUserAssignmentRequest.assignmentStatus);
             List<UserAssignmentDetailResponse> assignmentDetailResponse = new ArrayList<>();
             if(usersAllAssignments != null) {
                 usersAllAssignments.forEach(assignments -> {
@@ -246,6 +253,7 @@ public class UserService {
         if( usersAllAssignments != null)
         usersAllAssignments.forEach(assignments -> {
             UserAssignmentDetailResponse detailResponse = new UserAssignmentDetailResponse();
+            detailResponse.setUniqueAssignmentId(assignments.getUniqueId());
             detailResponse.setActiveAssignmentId(assignments.getAssignmentId());
             detailResponse.setCompanyName(assignments.getCompanyName());
             detailResponse.setPosition(assignments.getPosition());

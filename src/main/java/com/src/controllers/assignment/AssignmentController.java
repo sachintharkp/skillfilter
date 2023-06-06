@@ -39,12 +39,13 @@ public class AssignmentController {
 
     @GetMapping("/getAssignments")
     public ResponseEntity<List<UserAssignmentDetailResponse>> getAssignments(){
-        LOGGER.info("Request received to get all skills");
+        LOGGER.info("Request received to get all Assignments");
         try{
-            return ResponseEntity.ok().body(assignmentService.getAllAssignments());
+            return ResponseEntity.ok().body(assignmentService.getAllAssignmentsWithSeats());
         } catch (IllegalArgumentException ex) {
             LOGGER.log(Level.SEVERE, ex.toString(), ex);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 }
