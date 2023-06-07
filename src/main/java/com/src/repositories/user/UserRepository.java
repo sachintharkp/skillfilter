@@ -2,6 +2,7 @@ package com.src.repositories.user;
 
 import com.src.models.skill.SkillEntity;
 import com.src.models.user.UserEntity;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -16,7 +17,8 @@ public interface UserRepository extends CrudRepository<UserEntity, Long> {
 
     List<SkillEntity> FindUserSkills(@Param("userId") Long userId);
 
-    List<UserEntity> findAll();
+    @Query(value = "SELECT * FROM user_util u where u.role != \"manager\"",nativeQuery = true)
+    List<UserEntity> findAllUsers();
 
     Optional<UserEntity> findByUsername(String username);
 

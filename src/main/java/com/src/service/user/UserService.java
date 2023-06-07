@@ -217,7 +217,7 @@ public class UserService {
 
         List<UserResponse> allUsers = new ArrayList<>();
 
-        List<UserEntity> users = userRepository.findAll();
+        List<UserEntity> users = userRepository.findAllUsers();
 
         users.forEach(user -> {
            UserResponse userResponse = new UserResponse();

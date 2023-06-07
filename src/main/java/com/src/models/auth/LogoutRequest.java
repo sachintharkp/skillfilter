@@ -2,18 +2,16 @@ package com.src.models.auth;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.NotBlank;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class LogoutRequest {
 
-    @JsonProperty(ATTR_USER_NAME)
-    @NotBlank
-    public String username;
+    @JsonProperty(ATTR_USER_ID)
+    public long userid;
 
-    public static final String ATTR_USER_NAME = "username";
+    public static final String ATTR_USER_ID = "userid";
 
-    public String getUsername() {
-        return username;
+    public long getUserid() {
+        return userid;
     }
 }

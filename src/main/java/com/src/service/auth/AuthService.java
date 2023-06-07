@@ -56,21 +56,19 @@ public class AuthService {
         return loginResponse;
     }
 
-    public LogoutResponse logout(LogoutRequest loginRequest){
-        Optional<UserEntity> user = userRepository.findByUsername(loginRequest.getUsername());
-        LogoutResponse logoutResponse = new LogoutResponse();
+    public LogoutResponse logout(LogoutRequest logoutRequest){
 
-        if(user.isPresent()){
-            Optional<List<LoginHistory>> loggedSessions = loginHistRepository.findByUserId(user.get().getUserId());
-            loggedSessions.ifPresent(stream -> stream
-                    .forEach(loginHistory -> {
-                       loginHistRepository.deactivateUser(user.get().getUserId());
-                    }));
-            logoutResponse.setStatus(SUCCESS);
-        }
-        else {
-            logoutResponse.setStatus(FAIL);
-        }
+        LogoutResponse logoutResponse = new LogoutResponse();
+            Optional<List<LoginHistory>> loggedSessions = loginHistRepository.findByUserId(logoutRequest.getUserid());
+            if(loggedSessions.get().size()>0){
+                loggedSessions.get().forEach(loginHistory -> {
+                    loginHistRepository.deactivateUser(logoutRequest.getUserid());
+                });
+                logoutResponse.setStatus(SUCCESS);
+           }
+           else{
+                logoutResponse.setStatus(FAIL);
+            }
         return logoutResponse;
     }
 }
