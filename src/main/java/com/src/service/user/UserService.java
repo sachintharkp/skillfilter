@@ -286,4 +286,14 @@ public class UserService {
         }
     }
 
+    public  boolean hasActiveAssignment(long userId){
+
+        Optional<List<UserAssignmentEntity>> activeAssignments = userAssignmentRepository.findUsersHasActiveAssignment(userId);
+        if(activeAssignments.get().size()>0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
 }

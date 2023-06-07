@@ -10,6 +10,7 @@ import com.src.repositories.assignment.AssignmentRepository;
 import com.src.repositories.skill.SkillRepository;
 import com.src.repositories.skill.UserSkillRepository;
 import com.src.repositories.user.UserRepository;
+import com.src.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class SkillService {
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private SkillRepository skillRepository;
@@ -93,7 +97,9 @@ public class SkillService {
 
                     boolean isQualified = compareUserSkills(user.getUserId(), skillList);
 
-                    if (isQualified) {
+                    boolean isActiveAssignment = userService.hasActiveAssignment(user.getUserId());
+
+                    if (isQualified && !isActiveAssignment) {
                         SkilledUsersResponse skillsUser = new SkilledUsersResponse();
                         skillsUser.setUserid(user.getUserId());
                         skillsUser.setUsername(user.getUsername());
