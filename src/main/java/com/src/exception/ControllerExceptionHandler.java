@@ -20,7 +20,7 @@ public class ControllerExceptionHandler {
         ErrorMessage message = new ErrorMessage(
                 HttpStatus.NOT_FOUND.value(),
                 new Date(),
-                ex.getMessage(),
+                ex.getCause().getMessage(),
                 request.getDescription(false));
 
         return new ResponseEntity<ErrorMessage>(message, HttpStatus.NOT_FOUND);
@@ -31,7 +31,7 @@ public class ControllerExceptionHandler {
         ErrorMessage message = new ErrorMessage(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 new Date(),
-                ex.getMessage(),
+                ex.getCause().getMessage(),
                 request.getDescription(false));
 
         return new ResponseEntity<ErrorMessage>(message, HttpStatus.INTERNAL_SERVER_ERROR);
